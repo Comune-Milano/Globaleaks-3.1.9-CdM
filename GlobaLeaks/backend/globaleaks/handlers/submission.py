@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
 #
 # Handlerse dealing with submission interface
+from __future__ import print_function
 import copy
 import json
+import re
 
 from six import text_type
 
@@ -17,6 +19,35 @@ from globaleaks.utils.structures import get_localized_values
 from globaleaks.utils.token import TokenList
 from globaleaks.utils.utility import log, get_expiration, \
     datetime_now, datetime_never, datetime_to_ISO8601
+
+
+def _parse_request(client_ip, tid):
+    log.debug("IP del segnalante" + client_ip)
+
+    if State.tenant_cache[tid]['enable_network_detecting']:
+
+        ext_ip_addr = State.tenant_cache[tid]['external_ip']
+        int_ip_addr = State.tenant_cache[tid]['internal_ip']
+
+        extIPoctetNumber = len(ext_ip_addr.split("."))
+        intIPoctetNumber = len(int_ip_addr.split("."))
+
+        external_ip_regex = r"(" + State.tenant_cache[tid]['external_ip'] + (".\d{1,3}" * (4-extIPoctetNumber) ) + ")"
+        internal_ip_regex = r"(" + State.tenant_cache[tid]['internal_ip'] + (".\d{1,3}" * (4-intIPoctetNumber) ) + ")"
+
+        #print(external_ip_regex)
+        #print(internal_ip_regex)
+        #print(client_ip)
+
+        if re.search(external_ip_regex, client_ip):
+            return 1
+
+        if re.search(internal_ip_regex, client_ip):
+            return 0
+
+        print("IP NON RICONOSCIUTO !!!")
+
+    return 0
 
 
 def db_assign_submission_progressive(session, tid):
@@ -252,7 +283,7 @@ def db_create_receivertip(session, receiver, internaltip):
     session.add(receivertip)
 
 
-def db_create_submission(session, tid, request, uploaded_files, client_using_tor):
+def db_create_submission(session, tid, client_ip, request, uploaded_files, client_using_tor):
     answers = request['answers']
 
     context, questionnaire = session.query(models.Context, models.Questionnaire) \
@@ -308,6 +339,10 @@ def db_create_submission(session, tid, request, uploaded_files, client_using_tor
 
     submission.receipt_hash = hash_password(receipt, State.tenant_cache[tid].receipt_salt)
 
+    #aggiungo il campo ext_network_prov
+    #TODO: aggiornare con la logica implementata
+    submission.ext_network_prov = _parse_request(client_ip, tid)
+
     session.add(submission)
     session.flush()
 
@@ -351,8 +386,8 @@ def db_create_submission(session, tid, request, uploaded_files, client_using_tor
 
 
 @transact
-def create_submission(session, tid, request, uploaded_files, client_using_tor):
-    return db_create_submission(session, tid, request, uploaded_files, client_using_tor)
+def create_submission(session, tid, client_ip, request, uploaded_files, client_using_tor):
+    return db_create_submission(session, tid, client_ip, request, uploaded_files, client_using_tor)
 
 
 class SubmissionInstance(BaseHandler):
@@ -371,7 +406,11 @@ class SubmissionInstance(BaseHandler):
         token = TokenList.get(token_id)
         token.use()
 
+        log.debug("CLIENT IP: "+self.request.client_ip)
+        print("CLIENT IP: "+self.request.client_ip)
+
         submission = create_submission(self.request.tid,
+                                       self.request.client_ip,
                                        request,
                                        token.uploaded_files,
                                        self.request.client_using_tor)

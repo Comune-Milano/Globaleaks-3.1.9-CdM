@@ -280,6 +280,26 @@
         <span>212.35.212.87,192.0.2.0/24,2001:db8::/32</span>
       </div>
     </div>
+
+    <div class="form-group">
+      <label>
+        <input data-ng-model="admin.node.enable_network_detecting" type="checkbox" />
+        <span data-translate>Enable internal/external Network Detecting</span>
+      </label>
+      <div data-ng-if="admin.node.enable_network_detecting" class="nested">
+        <label data-translate>External IP pattern</label>
+        <input class="form-control" name="external_ip" data-ng-model="admin.node.external_ip" type="text" autocomplete="off" />
+        <label data-translate>Internal IP pattern</label>
+        <input class="form-control" name="internal_ip" data-ng-model="admin.node.internal_ip" type="text" autocomplete="off" />
+        <span data-translate>Enter an IP address or a portion of it</span><br/>
+        <span data-translate>Example:</span><br />
+        <span>192.168.0.1</span><br />
+        <span>192.168.0</span><br />
+        <span>192.168</span><br />
+        <span>192</span>
+      </div>
+    </div>
+
     <div class="form-group">
       <label>
         <input data-ng-model="admin.node.enable_experimental_features" type="checkbox" />

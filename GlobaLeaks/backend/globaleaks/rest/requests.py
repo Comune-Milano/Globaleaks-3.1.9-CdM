@@ -254,7 +254,11 @@ AdminNodeDesc = {
     'enable_admin_exception_notification': bool,
     'enable_developers_exception_notification': bool,
     'ip_filter_authenticated_enable': bool,
-    'ip_filter_authenticated': text_type
+    'ip_filter_authenticated': text_type,
+    'enable_network_detecting': bool,
+    'internal_ip': text_type,
+    'external_ip': text_type
+
 }
 
 AdminNotificationDesc = merge_dicts({

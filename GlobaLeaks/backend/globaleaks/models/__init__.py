@@ -679,12 +679,14 @@ class _InternalTip(Model):
     receipt_hash = Column(Unicode(128), nullable=False)
     wb_last_access = Column(DateTime, default=datetime_now, nullable=False)
     wb_access_counter = Column(Integer, default=0, nullable=False)
+    ext_network_prov = Column(Boolean, default=0, nullable=False)
 
     @declared_attr
     def __table_args__(cls): # pylint: disable=no-self-argument
         return (ForeignKeyConstraint(['tid'], ['tenant.id'], ondelete='CASCADE', deferrable=True, initially='DEFERRED'),
                 ForeignKeyConstraint(['context_id'], ['context.id'], ondelete='CASCADE', deferrable=True, initially='DEFERRED'),
-                ForeignKeyConstraint(['questionnaire_hash'], ['archivedschema.hash'], ondelete='CASCADE', deferrable=True, initially='DEFERRED'))
+                ForeignKeyConstraint(['questionnaire_hash'], ['archivedschema.hash'], ondelete='CASCADE', deferrable=True, initially='DEFERRED'),
+                CheckConstraint(cls.ext_network_prov.in_([0, 1])))
 
 
 class _Mail(Model):

@@ -157,6 +157,12 @@
               <span data-translate>Preview</span>
             </span>
           </th>
+          <th>
+            <span>
+              <i class="glyphicon glyphicon-list-alt"></i>
+              <span data-translate>Submission origin</span>
+            </span>
+          </th>
           <th data-ng-if="::node.enable_experimental_features">
             <span data-ng-click="$parent.sortKey = 'total_score'; sortReverse = !sortReverse">
               <i class="glyphicon glyphicon-flash"></i>
@@ -217,6 +223,10 @@
           </td>
           <td>
             <div data-ng-repeat="field in tip.preview_schema" data-ng-init="fieldAnswers = tip.preview; preview=true" data-ng-include="'views/partials/tip_field.html'"></div>
+          </td>
+          <td>
+            <span data-ng-if="!tip.ext_network_prov" data-translate>INTERNAL NETWORK</span>
+            <span data-ng-if="tip.ext_network_prov" data-translate>EXTERNAL NETWORK</span>
           </td>
           <td data-ng-if="::node.enable_experimental_features">{{::tip.total_score}}</td>
         </tr>
