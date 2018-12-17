@@ -1069,6 +1069,7 @@ class MockDict:
             'latest_version': __version__,
             'receipt_salt': '<<the Lannisters send their regards>>',
             'maximum_filesize': 30,
+            'maximum_submission_timetolive': 365,
             'https_admin': True,
             'https_custodian': True,
             'https_whistleblower': True,

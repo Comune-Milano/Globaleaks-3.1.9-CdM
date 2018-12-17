@@ -87,6 +87,8 @@ ConfigDescriptor = {
 
     u'maximum_filesize': Int(default=30),
 
+    u'maximum_submission_timetolive': Int(default=365),
+
     u'https_admin': Bool(default=True),
     u'https_custodian': Bool(default=True),
     u'https_whistleblower': Bool(default=True),
@@ -161,6 +163,7 @@ ConfigFilters = {
         u'default_language',
         u'default_questionnaire',
         u'maximum_filesize',
+        u'maximum_submission_timetolive',
         u'https_admin',
         u'https_custodian',
         u'https_whistleblower',
