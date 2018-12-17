@@ -1,0 +1,37 @@
+<div>
+  <div id="LanguagePickerBox" class="languagePick row" data-ng-if="node.languages_enabled.length > 1">
+    <div class="pull-right">
+      <select class="form-control" data-ng-model="GLTranslate.indirect.appLanguage" data-ng-options="item.code as item.native for item in languages_enabled_selector"></select>
+    </div>
+  </div>
+  <div id="LoginStatusBox" class="row" data-ng-if="Utils.showUserStatusBox()">
+    <div class="pull-right">
+      <span id="LoginRoleText">
+        <label data-ng-if="session.role === 'whistleblower'" data-translate>Whistleblower</label>
+        <span data-ng-if="session.role !== 'whistleblower'" data-ng-switch="session.role">
+           <label>{{::preferences.name}}</label>
+           <span class="text-separator">(</span><a data-ng-href="{{session.homepage}}">{{session.role_l10n()}}</a><span class="text-separator">)</span>
+        </span>
+      </span>
+     <span id="PreferencesLinkBox" data-ng-if="session.role != 'whistleblower'">
+       <span class="text-separator">|</span>
+       <span>
+         <a id="PreferencesLink" href="/#/preferences" data-translate>Preferences</a>
+       </span>
+      </span>
+      <span id="LogoutLinkBox">
+        <span class="text-separator">|</span>
+        <span>
+          <a id="LogoutLink" href="" data-ng-click="Authentication.logout()" data-translate>Logout</a>
+        </span>
+      </span>
+    </div>
+  </div>
+  <div id="LoginFormBox" class="row" data-ng-if="Utils.showLoginForm()">
+    <div class="pull-right">
+      <div>{{::node.whistleblowing_receipt_prompt}}</div>
+      <div data-ng-include="'views/partials/wb_login.html'"></div>
+      <div class="LoginErrorBox alert alert-danger" data-ng-show="errors[0].code == 9" data-translate>The key code is either invalid or the submission has expired.</div>
+    </div>
+  </div>
+</div>
