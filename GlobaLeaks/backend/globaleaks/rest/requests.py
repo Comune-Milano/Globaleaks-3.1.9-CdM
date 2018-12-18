@@ -104,6 +104,8 @@ FileDesc = {
 AuthDesc = {
     'username': text_type,
     'password': text_type,
+    'receiver_auth_code': text_type,
+    'receiver_second_login': text_type,
     'token': text_type
 }
 
@@ -381,7 +383,11 @@ AdminReceiverDesc = {
     'can_postpone_expiration': bool,
     'can_grant_permissions': bool,
     'tip_notification': bool,
-    'configuration': text_type
+    'configuration': text_type,
+    'control_mail_1': email_regexp_or_empty,
+    'control_mail_2': email_regexp_or_empty,
+    'control_mail_3': email_regexp_or_empty,
+    'two_step_login_enabled': bool
 }
 
 AdminTLSCertFilesConfigDesc = {
@@ -496,7 +502,11 @@ ReceiverDesc = {
     'state': user_states_regexp,
     'can_delete_submission': bool,
     'can_postpone_expiration': bool,
-    'can_grant_permissions': bool
+    'can_grant_permissions': bool,
+    'control_mail_1': email_regexp_or_empty,
+    'control_mail_2': email_regexp_or_empty,
+    'control_mail_3': email_regexp_or_empty,
+    'two_step_login_enabled': bool
 }
 
 ReceiverCollectionDesc = [ReceiverDesc]

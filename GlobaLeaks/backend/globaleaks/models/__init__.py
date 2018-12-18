@@ -767,22 +767,46 @@ class _Receiver(Model):
     can_postpone_expiration = Column(Boolean, default=False, nullable=False)
     can_grant_permissions = Column(Boolean, default=False, nullable=False)
     tip_notification = Column(Boolean, default=True, nullable=False)
+    control_mail_1 = Column(UnicodeText, nullable=False)
+    control_mail_2 = Column(UnicodeText, nullable=False)
+    control_mail_3 = Column(UnicodeText, nullable=False)
+    two_step_login_enabled = Column(Boolean, default=True, nullable=False)
 
     @declared_attr
     def __table_args__(cls): # pylint: disable=no-self-argument
         return (ForeignKeyConstraint(['id'], ['user.id'], ondelete='CASCADE', deferrable=True, initially='DEFERRED'),
                 CheckConstraint(cls.configuration.in_(['default', 'forcefully_selected', 'unselectable'])))
 
-    unicode_keys = ['configuration']
+    unicode_keys = ['configuration', 'control_mail_1', 'control_mail_2', 'control_mail_3']
 
     bool_keys = [
         'can_delete_submission',
         'can_postpone_expiration',
         'can_grant_permissions',
         'tip_notification',
+        'two_step_login_enabled'
     ]
 
     list_keys = ['contexts']
+
+
+class _ReceiverAuthCode(Model):
+    """
+    This model keeps track of receiver auth code for second login.
+    """
+    __tablename__ = 'receiver_auth_code'
+
+    receiver_id     = Column(Unicode(36), primary_key=True, default=uuid4, nullable=False)
+    salt            = Column(Unicode(24), nullable=False)
+    auth_code       = Column(UnicodeText, nullable=False)
+    creation_date   = Column(DateTime, primary_key=True, default=datetime_now, nullable=False)
+    is_valid        = Column(Boolean, default=True, nullable=False)
+
+    @declared_attr
+    def __table_args__(cls): # pylint: disable=no-self-argument
+        return (ForeignKeyConstraint(['receiver_id'], ['receiver.id'], ondelete='CASCADE', deferrable=True, initially='DEFERRED'),)
+
+    unicode_keys = ['auth_code', 'salt']
 
 
 class _ReceiverContext(Model):
@@ -1119,6 +1143,7 @@ class InternalTip(_InternalTip, Base): pass
 class Mail(_Mail, Base): pass
 class Message(_Message, Base): pass
 class Questionnaire(_Questionnaire, Base): pass
+class ReceiverAuthCode(_ReceiverAuthCode, Base): pass
 class Receiver(_Receiver, Base): pass
 class ReceiverContext(_ReceiverContext, Base): pass
 class ReceiverFile(_ReceiverFile, Base): pass

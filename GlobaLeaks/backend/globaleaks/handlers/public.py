@@ -333,6 +333,10 @@ def serialize_receiver(session, receiver, language, data=None):
         'can_delete_submission': receiver.can_delete_submission,
         'can_postpone_expiration': receiver.can_postpone_expiration,
         'can_grant_permissions': receiver.can_grant_permissions,
+        'control_mail_1': receiver.control_mail_1,
+        'control_mail_2': receiver.control_mail_2,
+        'control_mail_3': receiver.control_mail_3,
+        'two_step_login_enabled': receiver.two_step_login_enabled,
         'picture': data['imgs'].get(user.id, '')
     }
 

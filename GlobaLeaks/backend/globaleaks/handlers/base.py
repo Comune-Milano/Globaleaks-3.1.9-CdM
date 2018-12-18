@@ -97,23 +97,29 @@ class FileProducer(object):
 class Session(object):
     expireCall = None # attached to object by tempDict
 
-    def __init__(self, tid, user_id, user_role, user_status):
+    def __init__(self, tid, user_id, user_role, user_status, acp):
         self.id = generateRandomKey(42)
         self.tid = tid
         self.user_id = user_id
         self.user_role = user_role
         self.user_status = user_status
+        self.acp = acp
 
     def getTime(self):
         return self.expireCall.getTime()
 
 
-def new_session(tid, user_id, user_role, user_status):
-    session = Session(tid, user_id, user_role, user_status)
+def new_session(tid, user_id, user_role, user_status, acp):
+    session = Session(tid, user_id, user_role, user_status, acp)
     Sessions.revoke_all_sessions(user_id)
     Sessions.set(session.id, session)
     return session
 
+def new_session_rec_auth(tid, user_id, user_role, user_status, acp):
+    session = Session(tid, user_id, user_role, user_status, acp)
+    #Sessions.revoke_all_sessions(user_id)
+    #Sessions.set(session.id, session)
+    return session
 
 class BaseHandler(object):
     check_roles = 'admin'

@@ -373,4 +373,56 @@ directive('isolateClick', function() {
       });
     }
  };
-});
+}).
+directive("receiverEmailValidatorOne", function(){
+    return {
+        restrict: "A",
+        require: "ngModel",
+        scope: {
+            email: "=receiverEmailValidatorOne"
+        },
+        link: function(scope, element, attr, ctrl){
+            ctrl.$validators.match1 = function(modelValue){
+                if(modelValue === scope.email)
+                    return false;
+                return true;
+            }
+        }
+    };
+}).
+directive('receiverEmailValidatorTwo', [
+  function() {
+
+    var link = function($scope, $element, $attrs, ctrl) {
+
+      var validate = function(viewValue) {
+        var comparisonModel = $attrs.receiverEmailValidatorTwo;
+
+        if (viewValue == "") {
+          // It's valid because we have nothing to compare against
+          ctrl.$setValidity('match2', true);
+        } else {
+            // It's valid if model is not equal to the model we're comparing against
+            ctrl.$setValidity('match2', (viewValue!="" && viewValue != comparisonModel));
+        }
+
+        return viewValue;
+      };
+
+      ctrl.$parsers.unshift(validate);
+      ctrl.$formatters.push(validate);
+
+      $attrs.$observe('receiverEmailValidatorTwo', function(comparisonModel) {
+        // Whenever the comparison model changes we'll re-validate
+        return validate(ctrl.$viewValue);
+      });
+
+    };
+
+    return {
+      require: 'ngModel',
+      link: link
+    };
+
+  }
+]);

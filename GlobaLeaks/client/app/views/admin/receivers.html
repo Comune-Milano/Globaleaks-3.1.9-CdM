@@ -19,6 +19,7 @@
                   <button
                     class="btn btn-xs btn-success"
                     data-ng-show="editing"
+                    data-ng-disabled="editReceiver.$invalid"
                     data-ng-click="save_receiver(receiver)">
                     <span data-translate>Save</span>
                   </button>
@@ -67,6 +68,44 @@
                       <span data-translate>The setting is enabled at a global level.</span>
                     </div>
                   </div>
+
+                  <div class="form-group">
+                    <label>
+                      <span class="btn btn-xs" data-ng-class="{'btn-danger': !receiver.two_step_login_enabled, 'btn-success': receiver.two_step_login_enabled}"
+                            data-ng-click="toggleTwoStepEnabled()">
+                        <span ng-if="!receiver.two_step_login_enabled" data-translate>Disabled</span>
+                        <span ng-if="receiver.two_step_login_enabled" data-translate>Enabled</span>
+                      </span>
+                      <span data-translate>2-Step Login</span>
+                    </label>
+                  </div>
+
+                  <div data-ng-if="receiver.two_step_login_enabled">
+                    <div class="form-group">
+                      <label data-translate>Set email address #1 for Receiver access control</label>
+                      <input class="form-control" name="control_mail_1" data-ng-model="receiver.control_mail_1" type="text" data-ng-pattern="email_regexp" receiver-email-validator-two="{{receiver.control_mail_3}}" required />
+                      <div class="text-danger" data-ng-show="editReceiver.control_mail_1.$error.required" data-translate>This field is mandatory</div>
+                      <div class="text-danger" data-ng-show="editReceiver.control_mail_1.$error.pattern" data-translate>Invalid email address</div>
+                      <div class="text-danger" data-ng-show="editReceiver.control_mail_1.$error.match2" data-translate>Email already entered</div>
+                    </div>
+
+                    <div class="form-group">
+                      <label data-translate>Set email address #2 for Receiver access control</label>
+                      <input class="form-control" name="control_mail_2" data-ng-model="receiver.control_mail_2" type="text" data-ng-pattern="email_regexp" receiver-email-validator-two="{{receiver.control_mail_1}}" required />
+                      <div class="text-danger" data-ng-show="editReceiver.control_mail_2.$error.required" data-translate>This field is mandatory</div>
+                      <div class="text-danger" data-ng-show="editReceiver.control_mail_2.$error.pattern" data-translate>Invalid email address</div>
+                      <div class="text-danger" data-ng-show="editReceiver.control_mail_2.$error.match2" data-translate>Email already entered</div>
+                    </div>
+
+                    <div class="form-group">
+                      <label data-translate>Set email address #3 for Receiver access control</label>
+                      <input class="form-control" name="control_mail_3" data-ng-model="receiver.control_mail_3" type="text" data-ng-pattern="email_regexp"  receiver-email-validator-two="{{receiver.control_mail_2}}" required />
+                      <div class="text-danger" data-ng-show="editReceiver.control_mail_3.$error.required" data-translate>This field is mandatory</div>
+                      <div class="text-danger" data-ng-show="editReceiver.control_mail_3.$error.pattern" data-translate>Invalid email address</div>
+                      <div class="text-danger" data-ng-show="editReceiver.control_mail_3.$error.match2" data-translate>Email already entered</div>
+                    </div>
+                  </div>
+
                   <hr />
                   <div class="form-group">UUID: {{receiver.id}}</div>
                 </div>

@@ -32,7 +32,11 @@ def admin_serialize_receiver(session, receiver, user, language):
         'can_grant_permissions': receiver.can_grant_permissions,
         'mail_address': user.mail_address,
         'configuration': receiver.configuration,
-        'tip_notification': receiver.tip_notification
+        'tip_notification': receiver.tip_notification,
+        'control_mail_1': receiver.control_mail_1,
+        'control_mail_2': receiver.control_mail_2,
+        'control_mail_3': receiver.control_mail_3,
+        'two_step_login_enabled': receiver.two_step_login_enabled
     })
 
     return get_localized_values(ret_dict, receiver, receiver.localized_keys, language)

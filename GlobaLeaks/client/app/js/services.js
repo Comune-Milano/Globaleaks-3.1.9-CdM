@@ -35,7 +35,10 @@ angular.module('GLServices', ['ngResource']).
             'password_change_needed': response.password_change_needed,
             'homepage': '',
             'auth_landing_page': '',
+            'receiver_second_login': response.receiverLoginState,
           };
+
+          $rootScope.show_2nd_login = (self.session.role === 'receiver' && self.session.receiver_second_login == 'second_login_to_complete')
 
           function initPreferences(prefs) {
             $rootScope.preferences = prefs;
@@ -51,9 +54,14 @@ angular.module('GLServices', ['ngResource']).
             self.session.auth_landing_page = '/custodian/identityaccessrequests';
             UserPreferences.get().$promise.then(initPreferences);
           } else if (self.session.role === 'receiver') {
-            self.session.homepage = '#/receiver/tips';
-            self.session.auth_landing_page = '/receiver/tips';
-            ReceiverPreferences.get().$promise.then(initPreferences);
+            if (self.session.receiver_second_login != 'login_ok') {
+                self.session.homepage = '#/login';
+                self.session.auth_landing_page = '/login';
+            } else {
+                self.session.homepage = '#/receiver/tips';
+                self.session.auth_landing_page = '/receiver/tips';
+                ReceiverPreferences.get().$promise.then(initPreferences);
+            }
           } else if (self.session.role === 'whistleblower') {
             self.session.auth_landing_page = '/status';
             self.session.homepage = '#/status';
@@ -64,7 +72,7 @@ angular.module('GLServices', ['ngResource']).
           }
         }
 
-        self.login = function(username, password, token, cb) {
+        self.login = function(username, password, auth_code_1, auth_code_2, auth_code_3, token, cb) {
           self.loginInProgress = true;
 
           var success_fn = function(response) {
@@ -92,6 +100,11 @@ angular.module('GLServices', ['ngResource']).
             }
           };
 
+          receiver_second_login = 'first_login_to_complete';
+          if (self.session != null) {
+            receiver_second_login = self.session.receiver_second_login
+          }
+
           if (username === 'whistleblower') {
             password = password.replace(/\D/g,'');
             return $http.post('receiptauth', {'receipt': password}).
@@ -99,12 +112,13 @@ angular.module('GLServices', ['ngResource']).
               self.loginInProgress = false;
             });
           } else if (token) {
-            return $http.post('authentication', {'username': '', 'password': '', 'token': token}).
+            return $http.post('authentication', {'username': '', 'password': '', 'receiver_auth_code': '', 'receiver_second_login' : receiver_second_login, 'token': token}).
             then(success_fn, function() {
               self.loginInProgress = false;
             });
           } else {
-            return $http.post('authentication', {'username': username, 'password': password, 'token': ''}).
+            var receiver_auth_code = auth_code_1 + auth_code_2 + auth_code_3;
+            return $http.post('authentication', {'username': username, 'password': password, 'receiver_auth_code': receiver_auth_code, 'receiver_second_login' : receiver_second_login, 'token': ''}).
             then(success_fn, function() {
               self.loginInProgress = false;
             });
@@ -149,7 +163,11 @@ angular.module('GLServices', ['ngResource']).
         self.loginRedirect = function(isLogout) {
           var role = self.session === undefined ? undefined : self.session.role;
 
-          self.session = undefined;
+          if (role == 'receiver' && self.session.receiver_second_login == 'second_login_to_complete') {
+            ;
+          } else  {
+            self.session = undefined;
+          }
 
           var source_path = $location.path();
 

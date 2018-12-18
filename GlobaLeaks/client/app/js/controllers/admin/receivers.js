@@ -23,6 +23,16 @@ controller('AdminReceiverEditorCtrl', ['$scope',
       $scope.editing = !$scope.editing;
     };
 
+    $scope.toggleTwoStepEnabled = function () {
+      $scope.receiver.two_step_login_enabled = !$scope.receiver.two_step_login_enabled;
+
+      if (!$scope.receiver.two_step_login_enabled) {
+        $scope.receiver.control_mail_1 = ''
+        $scope.receiver.control_mail_2 = ''
+        $scope.receiver.control_mail_3 = ''
+      }
+    };
+
     $scope.save = function() {
       $scope.save_receiver($scope.receiver, false);
     };
