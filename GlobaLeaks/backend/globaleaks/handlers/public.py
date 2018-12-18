@@ -273,6 +273,7 @@ def serialize_field(session, tid, field, language, data=None):
         'fieldgroup_id': field.fieldgroup_id if field.fieldgroup_id else '',
         'multi_entry': f_to_serialize.multi_entry,
         'required': field.required,
+        'sensitive_data': field.sensitive_data,
         'preview': field.preview,
         'stats_enabled': field.stats_enabled,
         'attrs': attrs,

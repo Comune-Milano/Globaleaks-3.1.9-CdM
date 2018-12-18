@@ -698,6 +698,7 @@ factory('AdminUtils', ['AdminContextResource', 'AdminQuestionnaireResource', 'Ad
       field.multi_entry = false;
       field.multi_entry_hint = '';
       field.required = false;
+      field.sensitive_data = false;
       field.preview = false;
       field.stats_enabled = false;
       field.attrs = {};
@@ -726,6 +727,7 @@ factory('AdminUtils', ['AdminContextResource', 'AdminQuestionnaireResource', 'Ad
       field.multi_entry = false;
       field.multi_entry_hint = '';
       field.required = false;
+      field.sensitive_data = false;
       field.preview = false;
       field.stats_enabled = false;
       field.attrs = {};

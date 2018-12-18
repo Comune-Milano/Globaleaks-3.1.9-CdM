@@ -57,6 +57,11 @@ def db_assign_submission_progressive(session, tid):
 
 
 def _db_serialize_archived_field_recursively(field, language):
+
+    #if field['sensitive_data'] == True:
+    #    print "ho trovato un campo sensibile"
+    #    return
+
     for key, _ in field.get('attrs', {}).items():
         if key not in field['attrs']:
             continue
@@ -262,12 +267,64 @@ def serialize_itip(session, internaltip, language):
     }
 
 
-def serialize_usertip(session, usertip, itip, language):
+def serialize_usertip(session, usertip, itip, language, is_sensitive_data_visible=False):
     ret = serialize_itip(session, itip, language)
     ret['id'] = usertip.id
     ret['internaltip_id'] = itip.id
     ret['answers'] = db_serialize_questionnaire_answers(session, itip.tid, usertip, itip)
+    ret['sensitive_answers'] = []
+
+    #if False :
+    #    if not is_sensitive_data_visible:
+    #        obfuscate_sensitive_answers(session, ret['answers'], False)
+    #    else:
+    #        output_list = extract_sensitive_answers(session, ret['answers'], [], language)
+    #        ret['sensitive_answers'] = output_list
+
+    if not is_sensitive_data_visible:
+        obfuscate_sensitive_answers(session, ret['answers'], False)
+    else:
+        output_list = extract_sensitive_answers(session, ret['answers'], [], language)
+        ret['sensitive_answers'] = output_list
+
     return ret
+
+def obfuscate_sensitive_answers(session, answers, to_obfuscate):
+    for key in answers.keys():
+        string_key = str(key)
+
+        if string_key == 'value' and to_obfuscate:
+            answers[string_key] = '********'
+            to_obfuscate = False
+
+        field = session.query(models.Field).filter(models.Field.id == key).one_or_none()
+        if field is not None:
+            if field.sensitive_data == True:
+                to_obfuscate = True
+
+        if isinstance(answers[string_key], list):
+            for item in answers[string_key]:
+                obfuscate_sensitive_answers(session, item, to_obfuscate)
+
+def extract_sensitive_answers(session, answers, output_list, language, field_name=None):
+    for key in answers.keys():
+        string_key = str(key)
+
+        if string_key == 'value' and field_name is not None:
+            #print(str(field_name) + ": " + answers[string_key])
+            output_list.insert(0, str(field_name) + ": " + answers[string_key])
+            field_name = None
+
+        field = session.query(models.Field).filter(models.Field.id == key).one_or_none()
+        if field is not None:
+            if field.sensitive_data:
+                field_name = field.label[language]
+
+        if isinstance(answers[string_key], list):
+            for item in answers[string_key]:
+                extract_sensitive_answers(session, item, output_list, language, field_name)
+
+    return output_list
 
 
 def db_create_receivertip(session, receiver, internaltip):

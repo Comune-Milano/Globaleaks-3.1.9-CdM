@@ -51,6 +51,14 @@
       <span class="glyphicon glyphicon glyphicon-volume-off"></span>
     </span>
 
+    <span id="tip-action-view-anag-data" data-ng-if="!tip.enable_view_anag_data"
+          data-ng-click="tip_view_anag_data()"
+          uib-popover="{{'View the whistleblower personal data' | translate}}"
+          popover-placement="top"
+          class="btn btn-default">
+      <span class="glyphicon glyphicon-warning-sign"></span>
+    </span>
+
     <span id="link-reload"
           data-ng-click="reload()"
           uib-popover="{{'Refresh page' | translate}}"

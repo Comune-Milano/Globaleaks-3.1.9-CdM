@@ -6,7 +6,7 @@ import string
 
 from six import text_type
 from twisted.internet import threads
-from twisted.internet.defer import inlineCallbacks
+from twisted.internet.defer import returnValue, inlineCallbacks
 
 from globaleaks import models
 from globaleaks.handlers.base import BaseHandler
@@ -105,10 +105,10 @@ def serialize_message(session, message):
     }
 
 
-def serialize_rtip(session, rtip, itip, language):
+def serialize_rtip(session, rtip, itip, language, is_sensitive_data_visible=False):
     user_id = rtip.receiver_id
 
-    ret = serialize_usertip(session, rtip, itip, language)
+    ret = serialize_usertip(session, rtip, itip, language, is_sensitive_data_visible)
 
     ret['id'] = rtip.id
     ret['receiver_id'] = user_id
@@ -203,13 +203,13 @@ def receiver_get_rfile_list(session, tid, rtip_id):
     return db_receiver_get_rfile_list(session, tid, rtip_id)
 
 
-def db_get_rtip(session, tid, user_id, rtip_id, language):
+def db_get_rtip(session, tid, user_id, rtip_id, language, is_sensitive_data_visible=False):
     rtip, itip = db_access_rtip(session, tid, user_id, rtip_id)
 
     rtip.access_counter += 1
     rtip.last_access = datetime_now()
 
-    return serialize_rtip(session, rtip, itip, language)
+    return serialize_rtip(session, rtip, itip, language, is_sensitive_data_visible)
 
 
 def db_mark_file_for_secure_deletion(session, relpath):
@@ -318,8 +318,8 @@ def set_receivertip_variable(session, tid, user_id, rtip_id, key, value):
 
 
 @transact
-def get_rtip(session, tid, user_id, rtip_id, language):
-    return db_get_rtip(session, tid, user_id, rtip_id, language)
+def get_rtip(session, tid, user_id, rtip_id, language, is_sensitive_data_visible=False):
+    return db_get_rtip(session, tid, user_id, rtip_id, language, is_sensitive_data_visible)
 
 
 def db_get_itip_comment_list(session, tid, itip):
@@ -391,6 +391,16 @@ class RTipInstance(OperationHandler):
 
     def get(self, tip_id):
         return get_rtip(self.request.tid, self.current_user.user_id, tip_id, self.request.language)
+
+    @inlineCallbacks
+    def post(self, tip_id):
+        request = self.validate_message(self.request.content.read(), requests.RTipDesc)
+
+        ret = yield get_rtip(self.request.tid, self.current_user.user_id, tip_id, self.request.language, request['deobfuscate'])
+
+        returnValue({
+            'sensitive_data_from_quest' : ret['sensitive_answers']
+        })
 
     def operation_descriptors(self):
         return {

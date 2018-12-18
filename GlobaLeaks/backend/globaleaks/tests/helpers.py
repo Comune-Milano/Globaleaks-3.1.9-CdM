@@ -179,6 +179,7 @@ def get_dummy_field():
         'multi_entry_hint': '',
         'stats_enabled': False,
         'required': False,
+        'sensitive_data': False,
         'attrs': {},
         'options': get_dummy_fieldoption_list(),
         'children': [],

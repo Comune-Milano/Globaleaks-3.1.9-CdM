@@ -314,6 +314,7 @@ AdminFieldDesc = {
     'y': int,
     'width': int,
     'required': bool,
+    'sensitive_data': bool,
     'preview': bool,
     'stats_enabled': bool,
     'type': field_type_regexp,
@@ -567,4 +568,8 @@ ExceptionDesc = {
     'errorMessage': text_type,
     'stackTrace': list,
     'agent': text_type
+}
+
+RTipDesc = {
+    'deobfuscate': bool
 }

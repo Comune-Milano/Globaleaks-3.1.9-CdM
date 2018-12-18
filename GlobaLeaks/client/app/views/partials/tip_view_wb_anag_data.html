@@ -1,0 +1,45 @@
+<div class="modal-header">
+    <button type="submit" class="close" aria-hidden="true" data-ng-click="cancel()">
+        <i class="glyphicon glyphicon glyphicon-remove-circle"></i>
+    </button>
+    <div class="modal-title" data-translate>to_translate_1</div>
+</div>
+<div class="modal-body">
+    <div id="HumanCaptcha">
+        <div class="alert alert-warning">
+            <span data-translate>to_translate_2</span>
+            <br/>
+            <span data-translate>to_translate_3</span>
+            <br/>
+        </div>
+    </div>
+</div>
+<div class="modal-footer">
+    <a id="modal-action-annulla" class="btn btn-info" data-ng-click="cancel()">
+        <i class="glyphicon glyphicon-ok"></i>
+        <span data-translate>Cancel</span>
+    </a>
+    <a id="modal-action-ok" class="btn btn-warning" data-ng-click="view_wb_anag_data_ok()">
+        <i class="glyphicon glyphicon-ok"></i>
+        <span data-translate>Proceed</span>
+    </a>
+</div>
+<div id="TipQuestionnaireAnswersBox" class="panel panel-default popup-scrollable" data-ng-init="collapsed = false"
+     data-ng-if="view_anag_data">
+    <div class="panel-heading" data-ng-click="collapsed = !collapsed; $event.stopPropagation();">
+        <div>
+            <span data-translate>Questionnaire answers</span>
+            <span class="pull-right">
+        <i data-ng-if="!collapsed" class="glyphicon glyphicon-collapse-down" uib-popover="{{'Collapse' | translate}}"
+           popover-placement="left"></i>
+        <i data-ng-if="collapsed" class="glyphicon glyphicon-fullscreen" uib-popover="{{'Expand' | translate}}"
+           popover-placement="left"></i>
+      </span>
+        </div>
+    </div>
+    <div class="TipPageSectionContent panel-body" data-ng-show="!collapsed">
+        <div data-ng-repeat="item in sensitive_data_from_quest | orderBy:'presentation_order'">
+            <span class="preformatted">{{item}}</span>
+        </div>
+    </div>
+</div>

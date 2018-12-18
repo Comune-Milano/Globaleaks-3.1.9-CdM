@@ -196,6 +196,21 @@ GLClient.controller('TipCtrl',
       });
     };
 
+    $scope.tip_view_anag_data = function () {
+      $uibModal.open({
+        templateUrl: 'views/partials/tip_view_wb_anag_data.html',
+        controller: 'TipOperationsCtrl',
+        resolve: {
+          tip: function () {
+            return $scope.tip;
+          },
+          operation: function () {
+            return 'reload';
+          }
+        }
+      });
+    };
+
     $scope.tip_postpone = function () {
       $uibModal.open({
         templateUrl: 'views/partials/tip_operation_postpone.html',
@@ -252,6 +267,21 @@ controller('TipOperationsCtrl',
           $route.reload();
         });
     }
+  };
+
+  $scope.view_wb_anag_data_ok = function () {
+    //$uibModalInstance.close();
+
+    var req = {
+      'deobfuscate': true,
+      'args': {}
+    };
+
+    return $http({method: 'POST', url: 'rtip/' + tip.id,  data: req}).then(function (response) {
+        $scope.sensitive_data_from_quest = response.data.sensitive_data_from_quest;
+        $scope.view_anag_data = true
+    });
+
   };
 }]).
 controller('RTipWBFileUploadCtrl', ['$scope', 'Authentication', 'RTipDownloadWBFile', 'RTipWBFileResource', function($scope, Authentication, RTipDownloadWBFile, RTipWBFileResource) {
