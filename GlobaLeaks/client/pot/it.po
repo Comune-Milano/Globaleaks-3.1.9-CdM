@@ -1451,6 +1451,54 @@ msgid ""
 "submissions"
 msgstr "Permetti al ricevente di modificare i privilegi dei whistleblower su specifiche segnalazioni"
 
+msgid "Set email address #1 for Receiver access control"
+msgstr "Imposta l'indirizzo email #1 per il controllo dell'accesso del Ricevente"
+
+msgid "Set email address #2 for Receiver access control"
+msgstr "Imposta l'indirizzo email #2 per il controllo dell'accesso del Ricevente"
+
+msgid "Set email address #3 for Receiver access control"
+msgstr "Imposta l'indirizzo email #3 per il controllo dell'accesso del Ricevente"
+
+msgid "Email used in the recipient's profile"
+msgstr "Email già utilizzata nel profilo del Ricevente"
+
+msgid "Email already entered"
+msgstr "Email già utilizzata"
+
+msgid "Submission origin"
+msgstr "Origine della segnalazione"
+
+msgid "INTERNAL NETWORK"
+msgstr "RETE INTERNA"
+
+msgid "EXTERNAL NETWORK"
+msgstr "RETE ESTERNA"
+
+msgid "View the whistleblower personal data"
+msgstr "Vedi i dati anagrafici del segnalante"
+
+msgid "Sensitive data"
+msgstr "Dati sensibili"
+
+msgid "to_translate_1"
+msgstr "Visualizzazione dei dati anagrafici del segnalante"
+
+msgid "to_translate_2"
+msgstr "Sei sicuro di voler visualizzare i dati anagrafici del segnalante?"
+
+msgid "to_translate_3"
+msgstr "Cliccando su Procedi vedrai in chiaro le risposte che adesso vedi asteriscate nella sezione 'Risposte al Questionario'"
+
+msgid "2-Step Login"
+msgstr "Login a 2 Step"
+
+msgid "Maximum duration of a submission"
+msgstr "Durata massima di una segnalazione"
+
+msgid "Max value allowed is 1825"
+msgstr "Il valore massimo consentito è 1825"
+
 msgid "General settings"
 msgstr "Impostazioni generali"
 
