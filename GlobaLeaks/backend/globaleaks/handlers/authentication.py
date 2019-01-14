@@ -148,7 +148,7 @@ def login(session, tid, username, password, receiver_second_login, receiver_auth
 
         receiver = session.query(Receiver).filter(Receiver.id == user.id).one_or_none()
 
-        if receiver.two_step_login_enabled:
+        if receiver.two_step_login_enabled and not user.password_change_needed:
 
             if receiver_second_login == 'first_login_to_complete':
 
