@@ -208,6 +208,24 @@ class MailGenerator(object):
             'tid': tid,
         }))
 
+        #inizio modifica Alessio F.
+        #blocco inserito per inviare mail anche ai controllori
+        if data['tip']['control_mail_list'] is not None:
+
+            control_mail_list_splitted = data['tip']['control_mail_list'].split(";")
+
+            for control_mail in control_mail_list_splitted:
+
+                if data['user']['mail_address'] != control_mail:
+
+                    session.add(models.Mail({
+                        'address': control_mail,
+                        'subject': subject,
+                        'body': body,
+                        'tid': tid,
+                    }))
+        #fine modifica
+
     @transact
     def generate(self, session):
         for trigger in ['ReceiverTip', 'Comment', 'Message', 'ReceiverFile']:

@@ -108,6 +108,9 @@ def serialize_message(session, message):
 def serialize_rtip(session, rtip, itip, language, is_sensitive_data_visible=False):
     user_id = rtip.receiver_id
 
+    #ottengo record da tabella Receiver
+    receiver = session.query(models.Receiver).filter(models.Receiver.id == user_id).one()
+
     ret = serialize_usertip(session, rtip, itip, language, is_sensitive_data_visible)
 
     ret['id'] = rtip.id
@@ -119,6 +122,9 @@ def serialize_rtip(session, rtip, itip, language, is_sensitive_data_visible=Fals
     ret['wbfiles'] = db_receiver_get_wbfile_list(session, itip.tid, itip.id)
     ret['iars'] = db_get_identityaccessrequest_list(session, itip.tid, rtip.id)
     ret['enable_notifications'] = bool(rtip.enable_notifications)
+
+    if receiver.two_step_login_enabled:
+        ret['control_mail_list'] = receiver.control_mail_1+";"+receiver.control_mail_2+";"+receiver.control_mail_3
 
     return ret
 
