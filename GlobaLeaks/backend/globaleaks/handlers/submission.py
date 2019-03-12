@@ -463,8 +463,8 @@ class SubmissionInstance(BaseHandler):
         token = TokenList.get(token_id)
         token.use()
 
-        log.debug("CLIENT IP: "+self.request.client_ip)
-        print("CLIENT IP: "+self.request.client_ip)
+        #log.debug("CLIENT IP: "+self.request.client_ip)
+        #print("CLIENT IP: "+self.request.client_ip)
 
         submission = create_submission(self.request.tid,
                                        self.request.client_ip,

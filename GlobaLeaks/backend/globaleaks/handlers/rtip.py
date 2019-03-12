@@ -125,6 +125,8 @@ def serialize_rtip(session, rtip, itip, language, is_sensitive_data_visible=Fals
 
     if receiver.two_step_login_enabled:
         ret['control_mail_list'] = receiver.control_mail_1+";"+receiver.control_mail_2+";"+receiver.control_mail_3
+	else:
+		ret['control_mail_list'] = None
 
     return ret
 
