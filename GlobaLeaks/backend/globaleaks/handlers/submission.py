@@ -22,7 +22,6 @@ from globaleaks.utils.utility import log, get_expiration, \
 
 
 def _parse_request(client_ip, tid):
-    log.debug("IP del segnalante" + client_ip)
 
     if State.tenant_cache[tid]['enable_network_detecting']:
 
@@ -34,10 +33,6 @@ def _parse_request(client_ip, tid):
 
         external_ip_regex = r"(" + State.tenant_cache[tid]['external_ip'] + (".\d{1,3}" * (4-extIPoctetNumber) ) + ")"
         internal_ip_regex = r"(" + State.tenant_cache[tid]['internal_ip'] + (".\d{1,3}" * (4-intIPoctetNumber) ) + ")"
-
-        #print(external_ip_regex)
-        #print(internal_ip_regex)
-        #print(client_ip)
 
         if re.search(external_ip_regex, client_ip):
             return 1
@@ -462,9 +457,6 @@ class SubmissionInstance(BaseHandler):
         # The get and use method will raise if the token is invalid
         token = TokenList.get(token_id)
         token.use()
-
-        #log.debug("CLIENT IP: "+self.request.client_ip)
-        #print("CLIENT IP: "+self.request.client_ip)
 
         submission = create_submission(self.request.tid,
                                        self.request.client_ip,
