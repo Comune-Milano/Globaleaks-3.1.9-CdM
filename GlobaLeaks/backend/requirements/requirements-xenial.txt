@@ -3,7 +3,7 @@ Twisted==16.0.0
 acme==0.22.2
 cffi==1.5.2
 chardet==2.3.0
-cryptography==1.2.3
+cryptography==3.2
 enum34==1.1.2
 idna==2.0
 pyOpenSSL==0.15.1
