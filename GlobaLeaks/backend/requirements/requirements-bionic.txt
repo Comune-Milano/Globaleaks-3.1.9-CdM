@@ -1,5 +1,5 @@
 Parsley==1.2
-Twisted==17.9.0
+Twisted==22.2.0
 acme==0.22.2
 chardet==3.0.4
 cffi==1.11.5
